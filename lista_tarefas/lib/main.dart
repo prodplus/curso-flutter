@@ -19,6 +19,8 @@ class _HomeState extends State<Home> {
   final _toDoController = TextEditingController();
 
   List _toDoList = [];
+  Map<String, dynamic> _lastRemoved;
+  int _lastRemovedPos;
 
   @override
   void initState() {
@@ -39,6 +41,22 @@ class _HomeState extends State<Home> {
       _toDoList.add(newToDo);
       _saveData();
     });
+  }
+
+  Future<Null> _onRefresh() async {
+    await Future.delayed(Duration(seconds: 1));
+
+    setState(() {
+      _toDoList.sort((a, b) {
+        return a['ok'] && !b['ok']
+            ? 1
+            : !a['ok'] && b['ok']
+                ? -1
+                : 0;
+      });
+    });
+
+    return null;
   }
 
   @override
@@ -72,11 +90,13 @@ class _HomeState extends State<Home> {
               ),
             ),
             Expanded(
-                child: ListView.builder(
-              itemBuilder: _buildItem,
-              padding: EdgeInsets.only(top: 10.0),
-              itemCount: _toDoList.length,
-            ))
+                child: RefreshIndicator(
+                    child: ListView.builder(
+                      itemBuilder: _buildItem,
+                      padding: EdgeInsets.only(top: 10.0),
+                      itemCount: _toDoList.length,
+                    ),
+                    onRefresh: _onRefresh))
           ],
         ));
   }
@@ -108,6 +128,30 @@ class _HomeState extends State<Home> {
           });
         },
       ),
+      onDismissed: (direction) {
+        setState(() {
+          _lastRemoved = Map.from(_toDoList[index]);
+          _lastRemovedPos = index;
+          _toDoList.removeAt(index);
+          _saveData();
+
+          final snack = SnackBar(
+            content: Text("Tarefa \"${_lastRemoved['title']}\" removida"),
+            action: SnackBarAction(
+                label: 'Desfazer',
+                onPressed: () {
+                  setState(() {
+                    _toDoList.insert(_lastRemovedPos, _lastRemoved);
+                    _saveData();
+                  });
+                }),
+            duration: Duration(seconds: 2),
+          );
+
+          Scaffold.of(contexto).removeCurrentSnackBar();
+          Scaffold.of(contexto).showSnackBar(snack);
+        });
+      },
     );
   }
 
