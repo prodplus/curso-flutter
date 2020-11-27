@@ -15,3 +15,9 @@ path_provider: ^1.1.0
 share: ^0.6.1+1
 transparent_image: ^1.0.0
 http: ^0.12.0+2
+
+https://api.giphy.com/v1/gifs/trending?api_key=Hp15F12ZezJWo61rnwb9Pg5TL1K6xHkL&limit=20&rating=g
+
+https://api.giphy.com/v1/gifs/search?api_key=Hp15F12ZezJWo61rnwb9Pg5TL1K6xHkL&q=dogs&limit=20&offset=25&rating=g&lang=pt
+
+keytool -list -v -alias androiddebugkey -keystore ~/.android/debug.keystore -storepass android -keypass android
