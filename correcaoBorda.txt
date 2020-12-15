@@ -21,3 +21,6 @@ https://api.giphy.com/v1/gifs/trending?api_key=Hp15F12ZezJWo61rnwb9Pg5TL1K6xHkL&
 https://api.giphy.com/v1/gifs/search?api_key=Hp15F12ZezJWo61rnwb9Pg5TL1K6xHkL&q=dogs&limit=20&offset=25&rating=g&lang=pt
 
 keytool -list -v -alias androiddebugkey -keystore ~/.android/debug.keystore -storepass android -keypass android
+
+classpath 'com.android.tools.build:gradle:3.3.0'
+classpath 'com.google.gms:google-services:4.3.0'
